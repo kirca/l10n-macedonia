@@ -15,6 +15,10 @@ Macedonian localization
         'base',
     ],
     'data': [
+        'data/account.account.type.csv',
+        'data/account.account.template.csv',
+        'data/l10n_mk_chart_template.xml',
+        'data/l10n_mk_wizard.xml',
     ],
     'installable': True,
     'application': False,
