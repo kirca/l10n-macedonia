@@ -1,0 +1,57 @@
+<?xml version="1.0"  encoding="utf-8"?>
+<openerp>
+	<data >
+		<record id="account_fiscal_position_template_1" model="account.fiscal.position.template">
+			<field name="chart_template_id" ref="l10n_mk_chart_template"/>
+			<field name="name">Даночни обврзници</field>
+		</record>
+
+		<record id="account_fiscal_position_template_2" model="account.fiscal.position.template">
+			<field name="chart_template_id" ref="l10n_mk_chart_template"/>
+			<field name="name">Извоз</field>
+		</record>
+
+		<record id="account_fiscal_position_template_3" model="account.fiscal.position.template">
+			<field name="chart_template_id" ref="l10n_mk_chart_template"/>
+			<field name="name">Увоз</field>
+		</record>
+
+	
+     <!-- Izvoz -->
+
+		<record id="account_fiscal_position_account_template_1" model="account.fiscal.position.account.template">
+			<field name="position_id" ref="account_fiscal_position_template_2"/>
+			<field name="account_dest_id" ref="kp_121"/>
+			<field name="account_src_id" ref="kp_120"/>
+		</record>
+		<record id="account_fiscal_position_tax_template_1" model="account.fiscal.position.tax.template">
+			<field name="position_id" ref="account_fiscal_position_template_2"/>
+			<field name="tax_src_id" ref="ddv_18"/>
+			<field name="tax_dest_id" ref="ddv_pole05"/>
+		</record>
+		<record id="account_fiscal_position_tax_template_2" model="account.fiscal.position.tax.template">
+			<field name="position_id" ref="account_fiscal_position_template_2"/>
+			<field name="tax_src_id" ref="ddv_5"/>
+			<field name="tax_dest_id" ref="ddv_pole05"/>
+		</record>
+
+     <!-- Uvoz -->
+		<record id="account_fiscal_position_account_template_2" model="account.fiscal.position.account.template">
+			<field name="position_id" ref="account_fiscal_position_template_3"/>
+			<field name="account_dest_id" ref="kp_221"/>
+			<field name="account_src_id" ref="kp_220"/>
+		</record>
+		<record id="account_fiscal_position_tax_template_3" model="account.fiscal.position.tax.template">
+			<field name="position_id" ref="account_fiscal_position_template_3"/>
+			<field name="tax_src_id" ref="pd_18"/>
+			<field name="tax_dest_id" ref="pd_18_uvoz"/>
+		</record>
+		<record id="account_fiscal_position_tax_template_3" model="account.fiscal.position.tax.template">
+			<field name="position_id" ref="account_fiscal_position_template_3"/>
+			<field name="tax_src_id" ref="pd_5"/>
+			<field name="tax_dest_id" ref="pd_5_uvoz"/>
+		</record>
+
+		
+	</data>
+</openerp>

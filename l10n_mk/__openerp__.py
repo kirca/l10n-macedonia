@@ -22,6 +22,7 @@ Macedonian localization
         'data/l10n_mk_chart_template.xml',
         'data/l10n_mk_wizard.xml',
         'data/account.tax.template.csv',
+        'data/fiscal_position_template.xml',
     ],
     'installable': True,
     'application': False,
