@@ -7,8 +7,7 @@
 			<field name="code_digits">0</field>
 
 			<field name="account_root_id"                ref="kp_kp" />
-			<!--TODO add taxes-->
-			<!--<field name="tax_code_root_id" 		     ref="pdv_code_porezi"/>-->
+			<field name="tax_code_root_id" 		     ref="ddv_code_danoci"/>
 			<field name="bank_account_view_id"           ref="kp_100"/>
 
 			<field name="property_account_receivable"    ref="kp_120"/>

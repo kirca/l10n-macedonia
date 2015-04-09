@@ -1,0 +1,16 @@
+id,description,chart_template_id/id,name,amount,parent_id,child_depend,type,account_collected_id/id,account_paid_id/id,type_tax_use,base_code_id/id,tax_code_id/id,ref_base_code_id/id,ref_tax_code_id/id,ref_tax_sign,tax_sign,base_sign,ref_base_sign,sequence
+ddv_18,ДДВ 18%,l10n_mk_chart_template,Д-18,0.18,,False,percent,kp_2301,kp_2301,sale,ddv_code_01,ddv_code_02,ddv_code_01,ddv_code_02,1,1,1,1,10
+ddv_5,ДДВ 5%,l10n_mk_chart_template,Д-5,0.05,,False,percent,kp_2302,kp_2302,sale,ddv_code_03,ddv_code_04,ddv_code_03,ddv_code_04,1,1,1,1,10
+ddv_0,ДДВ 0%,l10n_mk_chart_template,Д-0,0,,False,percent,,,sale,,,,,,,,,10
+ddv_18_avans,ДДВ 18% аванс,l10n_mk_chart_template,Д-А-18,0.18,,False,percent,kp_2303,kp_2303,sale,ddv_code_01,ddv_code_02,ddv_code_01,ddv_code_02,1,1,1,1,10
+ddv_5_avans,ДДВ 5% аванс,l10n_mk_chart_template,Д-А-5,0.05,,False,percent,kp_2304,kp_2304,sale,ddv_code_03,ddv_code_04,ddv_code_03,ddv_code_04,1,1,1,1,10
+ddv_pole05,Промет ослободен од данок со право на одбивка на претходен данок,l10n_mk_chart_template,Д1-0,0,,False,percent,,,sale,ddv_code_05,,ddv_code_05,,,,1,1,10
+ddv_pole06,Промет ослободен од данок без право на одбивка на претходен данок,l10n_mk_chart_template,Д2-0,0,,False,percent,,,sale,ddv_code_06,,ddv_code_06,,,,1,1,10
+ddv_pole07,Промет извршен спрема даночни обврзници кои немаат седиште во земјата и кој не е предмет на оданочување со ДДВ согласно член 2 и 14 од ЗДДВ.,l10n_mk_chart_template,Д3-0,0,,False,percent,,,sale,ddv_code_07,,ddv_code_07,,,,1,1,10
+pd_18,ДДВ 18% влезни ф-ри,l10n_mk_chart_template,ВД-18,0.18,,False,percent,kp_1301,kp_1301,purchase,ddv_code_18,ddv_code_19,ddv_code_18,ddv_code_19,1,1,1,1,10
+pd_5,ДДВ 5% влезни ф-ри,l10n_mk_chart_template,ВД-5,0.05,,False,percent,kp_1302,Kp_1302,purchase,ddv_code_18,ddv_code_19,ddv_code_18,ddv_code_19,1,1,1,1,10
+pd_0,ДДВ 0% влезни ф-ри,l10n_mk_chart_template,ВД-0,0,,False,percent,,,purchase,,,,,,,,,10
+pd_18_avans,ДДВ 18% аванс влезни ф-ри,l10n_mk_chart_template,ВД-А-18,0.18,,False,percent,kp_1303,kp_1303,purchase,ddv_code_18,ddv_code_19,ddv_code_18,ddv_code_19,1,1,1,1,10
+pd_5_avans,ДДВ 5% аванс влезни ф-ри,l10n_mk_chart_template,ВД-А-5,0.05,,False,percent,kp_1304,kp_1304,purchase,ddv_code_18,ddv_code_19,ddv_code_18,ddv_code_19,1,1,1,1,10
+pd_18_uvoz,ДДВ 18% увоз,l10n_mk_chart_template,ВД-У-18,0.18,,False,percent,kp_1305,kp_1305,purchase,ddv_code_24,ddv_code_25,ddv_code_24,ddv_code_25,1,1,1,1,10
+pd_5_uvoz,ДДВ 5% увоз,l10n_mk_chart_template,ВД-У-5,0.05,,False,percent,kp_1306,kp_1306,purchase,ddv_code_24,ddv_code_25,ddv_code_24,ddv_code_25,1,1,1,1,10

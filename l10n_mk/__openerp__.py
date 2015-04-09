@@ -12,13 +12,16 @@
 Macedonian localization
 """,
     'depends': [
-        'base',
+        'account',
+        'account_chart',
     ],
     'data': [
         'data/account.account.type.csv',
+        'data/account.tax.code.template.csv',
         'data/account.account.template.csv',
         'data/l10n_mk_chart_template.xml',
         'data/l10n_mk_wizard.xml',
+        'data/account.tax.template.csv',
     ],
     'installable': True,
     'application': False,
