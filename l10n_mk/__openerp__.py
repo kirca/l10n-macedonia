@@ -3,13 +3,13 @@
 # this module contains the full copyright notices and license terms.
 {
     'name': 'Macedonian localization',
-    'version': '0.1',
+    'version': '1.0',
     'author': 'HacBee UAB',
-    'category': 'Custom',
+    'category': 'Localization/Account Charts',
     'website': 'http://www.hbee.eu',
     'summary': '',
     'description': """
-Macedonian localization
+Macedonian localization of accounts and taxes
 """,
     'depends': [
         'account',
