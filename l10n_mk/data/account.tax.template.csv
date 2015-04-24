@@ -1,16 +1,16 @@
 id,description,chart_template_id/id,name,amount,parent_id,child_depend,type,account_collected_id/id,account_paid_id/id,type_tax_use,base_code_id/id,tax_code_id/id,ref_base_code_id/id,ref_tax_code_id/id,ref_tax_sign,tax_sign,base_sign,ref_base_sign,sequence
-ddv_18,Д-18,l10n_mk_chart_template,18% ДДВ,0.18,,False,percent,kp_2301,kp_2301,sale,ddv_code_01,ddv_code_02,ddv_code_01,ddv_code_02,1,1,1,1,10
-ddv_5,Д-5,l10n_mk_chart_template,5% ДДВ,0.05,,False,percent,kp_2302,kp_2302,sale,ddv_code_03,ddv_code_04,ddv_code_03,ddv_code_04,1,1,1,1,10
-ddv_0,Д-0,l10n_mk_chart_template,0% ДДВ,0,,False,percent,,,sale,,,,,,,,,10
-ddv_18_avans,Д-А-18,l10n_mk_chart_template,18% ДДВ,0.18,,False,percent,kp_2303,kp_2303,sale,ddv_code_01,ddv_code_02,ddv_code_01,ddv_code_02,1,1,1,1,10
-ddv_5_avans,Д-А-5,l10n_mk_chart_template,5% ДДВ,0.05,,False,percent,kp_2304,kp_2304,sale,ddv_code_03,ddv_code_04,ddv_code_03,ddv_code_04,1,1,1,1,10
-ddv_pole05,Д1-0,l10n_mk_chart_template,0% ДДВ,0,,False,percent,,,sale,ddv_code_05,,ddv_code_05,,,,1,1,10
-ddv_pole06,Д2-0,l10n_mk_chart_template,0% ДДВ,0,,False,percent,,,sale,ddv_code_06,,ddv_code_06,,,,1,1,10
-ddv_pole07,Д3-0,l10n_mk_chart_template,0% ДДВ,0,,False,percent,,,sale,ddv_code_07,,ddv_code_07,,,,1,1,10
-pd_18,ВД-18,l10n_mk_chart_template,18% ДДВ,0.18,,False,percent,kp_1301,kp_1301,purchase,ddv_code_18,ddv_code_19,ddv_code_18,ddv_code_19,1,1,1,1,10
-pd_5,ВД-5,l10n_mk_chart_template,5% ДДВ,0.05,,False,percent,kp_1302,kp_1302,purchase,ddv_code_18,ddv_code_19,ddv_code_18,ddv_code_19,1,1,1,1,10
-pd_0,ВД-0,l10n_mk_chart_template,0% ДДВ,0,,False,percent,,,purchase,,,,,,,,,10
-pd_18_avans,ВД-А-18,l10n_mk_chart_template,18% ДДВ,0.18,,False,percent,kp_1303,kp_1303,purchase,ddv_code_18,ddv_code_19,ddv_code_18,ddv_code_19,1,1,1,1,10
-pd_5_avans,ВД-А-5,l10n_mk_chart_template,5% ДДВ,0.05,,False,percent,kp_1304,kp_1304,purchase,ddv_code_18,ddv_code_19,ddv_code_18,ddv_code_19,1,1,1,1,10
-pd_18_uvoz,ВД-У-18,l10n_mk_chart_template,18% ДДВ,0.18,,False,percent,kp_1305,kp_1305,purchase,ddv_code_24,ddv_code_25,ddv_code_24,ddv_code_25,1,1,1,1,10
-pd_5_uvoz,ВД-У-5,l10n_mk_chart_template,5% ДДВ,0.05,,False,percent,kp_1306,kp_1306,purchase,ddv_code_24,ddv_code_25,ddv_code_24,ddv_code_25,1,1,1,1,10
+ddv_18,Д-18,l10n_mk_chart_template,ДДВ 18%,0.18,,False,percent,kp_2301,kp_2301,sale,ddv_code_01,ddv_code_02,ddv_code_01,ddv_code_02,1,1,1,1,10
+ddv_5,Д-5,l10n_mk_chart_template,ДДВ 5%,0.05,,False,percent,kp_2302,kp_2302,sale,ddv_code_03,ddv_code_04,ddv_code_03,ddv_code_04,1,1,1,1,10
+ddv_0,Д-0,l10n_mk_chart_template,ДДВ 0%,0,,False,percent,,,sale,,,,,,,,,10
+ddv_18_avans,Д-А-18,l10n_mk_chart_template,ДДВ 18% аванс,0.18,,False,percent,kp_2303,kp_2303,sale,ddv_code_01,ddv_code_02,ddv_code_01,ddv_code_02,1,1,1,1,10
+ddv_5_avans,Д-А-5,l10n_mk_chart_template,ДДВ 5% аванс,0.05,,False,percent,kp_2304,kp_2304,sale,ddv_code_03,ddv_code_04,ddv_code_03,ddv_code_04,1,1,1,1,10
+ddv_pole05,Д1-0,l10n_mk_chart_template,Извоз,0,,False,percent,,,sale,ddv_code_05,,ddv_code_05,,,,1,1,10
+ddv_pole06,Д2-0,l10n_mk_chart_template,Промет ослободен од данок без право на одбивка на претходен данок,0,,False,percent,,,sale,ddv_code_06,,ddv_code_06,,,,1,1,10
+ddv_pole07,Д3-0,l10n_mk_chart_template,Промет извршен спрема даночни обврзници кои немаат седиште во земјата и кој не е предмет на оданочување со ДДВ согласно член 2 и 14 од ЗДДВ.,0,,False,percent,,,sale,ddv_code_07,,ddv_code_07,,,,1,1,10
+pd_18,ВД-18,l10n_mk_chart_template,ДДВ 18% влезни ф-ри,0.18,,False,percent,kp_1301,kp_1301,purchase,ddv_code_18,ddv_code_19,ddv_code_18,ddv_code_19,1,1,1,1,10
+pd_5,ВД-5,l10n_mk_chart_template,ДДВ 5% влезни ф-ри,0.05,,False,percent,kp_1302,kp_1302,purchase,ddv_code_18,ddv_code_19,ddv_code_18,ddv_code_19,1,1,1,1,10
+pd_0,ВД-0,l10n_mk_chart_template,ДДВ 0% влезни ф-ри,0,,False,percent,,,purchase,,,,,,,,,10
+pd_18_avans,ВД-А-18,l10n_mk_chart_template,ДДВ 18% аванс в. ф-ри,0.18,,False,percent,kp_1303,kp_1303,purchase,ddv_code_18,ddv_code_19,ddv_code_18,ddv_code_19,1,1,1,1,10
+pd_5_avans,ВД-А-5,l10n_mk_chart_template,ДДВ 5% аванс в. ф-ри,0.05,,False,percent,kp_1304,kp_1304,purchase,ddv_code_18,ddv_code_19,ddv_code_18,ddv_code_19,1,1,1,1,10
+pd_18_uvoz,ВД-У-18,l10n_mk_chart_template,ДДВ 18% увоз,0.18,,False,percent,kp_1305,kp_1305,purchase,ddv_code_24,ddv_code_25,ddv_code_24,ddv_code_25,1,1,1,1,10
+pd_5_uvoz,ВД-У-5,l10n_mk_chart_template,ДДВ 5% увоз,0.05,,False,percent,kp_1306,kp_1306,purchase,ddv_code_24,ddv_code_25,ddv_code_24,ddv_code_25,1,1,1,1,10
