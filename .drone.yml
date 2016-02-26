@@ -1,0 +1,21 @@
+build:
+  image: pollen.hbee.eu/l10n-macedonia:8.0.0.1
+  pull: true
+  auth_config:
+    username: $$REGISTRY_USERNAME
+    password: $$REGISTRY_PASSWORD
+  environment:
+    - PGHOST=localhost
+    - PGDATABASE=l10n-macedonia
+  commands:
+    - cd $DRONE_BUILD_DIR
+    - addons=`ls -d */ | cut -f1 -d'/' | awk -vORS=, '{print $1}' | sed 's/,$/\n/'`
+    - cp -r $DRONE_BUILD_DIR/* $ODOO_HOME/c1
+    - createdb $PGDATABASE
+    - $ODOO_HOME/start_server.sh --stop-after-init -i $addons
+    - $ODOO_HOME/start_server.sh --stop-after-init --test-enable --log-level test -u $addons
+    - pep8 --ignore=E501 $ODOO_HOME/c1
+
+compose:
+  pgsql:
+    image: pollen.hbee.eu/pgsql

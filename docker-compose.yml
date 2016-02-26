@@ -1,0 +1,19 @@
+data:
+  image: ubuntu
+  extends:
+    file: data.yml 
+    service: odoo_data
+pgsql:
+  image: pollen.hbee.eu/pgsql:9.5.0
+attachments:
+  image: pollen.hbee.eu/attachments
+odoo:
+  image: pollen.hbee.eu/l10n-macedonia:8.0.0.1
+  command: -s
+  ports:
+    - "8069:8069"
+  links:
+    - pgsql:db
+  volumes_from:
+    - data
+    - attachments
