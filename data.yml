@@ -1,4 +1,0 @@
-odoo_data:
-  volumes:
-    - .:/home/odoo/c1
-    # - .odoo/odoo:/home/odoo/odoo

@@ -7,6 +7,8 @@ Quick Start with Docker
 -----------------------
 
         git clone -b ODOO_VERSION git@bitbucket.org:hbee/addons_l10n-macedonia.git
-        docker-compose run --name=l10n_mk-ODOO_VERSION --service-ports odoo
+        docker-compose up
 
-[Docker guide](https://hive.hbee.eu/projects/hbee/wiki/Docker)
+Contributing
+----------------------
+Follow [OCA guidelines](https://github.com/OCA/maintainer-tools/blob/master/CONTRIBUTING.md)
