@@ -2,7 +2,7 @@ version: '2'
 
 services:
   odoo:
-    image: pollen.hbee.eu/l10n-macedonia:9.0.0.1
+    image: hbee/l10n-macedonia:9.0.0.1
     depends_on:
       - db
     ports:
@@ -12,7 +12,7 @@ services:
     volumes:
       - attachments:/home/odoo/.local
   db:
-    image: pollen.hbee.eu/pgsql:9.5.0
+    image: hbee/odoo-pgsql:9.5.0
     volumes:
       - data:/var/lib/postgresql/data
 

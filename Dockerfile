@@ -1,6 +1,6 @@
-FROM ubuntu:14.04
+# Copyright (C) 2016 by HBEE <https://hbee.eu/>
 
-ENV ODOO_COMMIT=043144ce42e204ea797016a984de23d36e54fdff
+FROM ubuntu:14.04
 
 # All packages needed for running odoo
 RUN apt-get update && apt-get -y -q install \
@@ -49,7 +49,8 @@ RUN wget http://download.gna.org/wkhtmltopdf/0.12/0.12.1/wkhtmltox-0.12.1_linux-
 RUN useradd --system -m -r -U odoo && \
     echo "odoo ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
-ENV HOME=/home/odoo
+ENV HOME=/home/odoo \
+    ODOO_COMMIT=4a0a2794720834a2737259bb1d278d69015ab4c5
 
 WORKDIR $HOME
 RUN wget -O odoo.zip https://github.com/odoo/odoo/archive/$ODOO_COMMIT.zip && \
@@ -73,6 +74,8 @@ ENV PGHOST=db \
     PGUSER=odoo \
     DB_TEMPLATE=template1 \
     LOG_LEVEL=critical
+
+RUN chown -R odoo:odoo $HOME
 
 EXPOSE 8069
 ENTRYPOINT ["/odoo.sh"]
