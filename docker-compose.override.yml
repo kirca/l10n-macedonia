@@ -2,6 +2,5 @@ version: '2'
 
 services:
   odoo:
-    build: .
     volumes:
       - '.:/home/odoo/addons_l10n-macedonia'
