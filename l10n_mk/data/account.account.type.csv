@@ -1,10 +1,4 @@
-"name","code","close_method","id","report_type"
-"Обврски спрема добавувачи","obvrski_dob","unreconciled","account_type_obvrski_dob","liability"
-"Побарувања од купувачи","pobaruvanja_kup","unreconciled","account_type_pobaruvanja_kup","asset"
-"Класа","klasa","none","account_type_klasa","/"
-"Група","grupa","none","account_type_grupa","/"
-"Останато","other","none","account_type_other","/"
-"Актива","aktiva","balance","account_type_aktiva","asset"
-"Пасива","pasiva","balance","account_type_pasiva","liability"
-"Приход","prihod","none","account_type_prihod","income"
-"Расход","rashod","none","account_type_rashod","expense"
+id,name,type
+account.data_account_type_other,Other,Regular
+account.data_account_type_vonbilansna_pasiva,Vonbilansna pasiva,Regular
+account.data_account_type_vonbilansna_aktiva,Vonbilansna aktiva,Regular

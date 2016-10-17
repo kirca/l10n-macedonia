@@ -2,12 +2,12 @@
 <openerp>
 	<data >
 		<record id="account_fiscal_position_template_1" model="account.fiscal.position.template">
-			<field name="chart_template_id" ref="l10n_mk_chart_template"/>
+			<field name="chart_template_id" ref="l10n_mk_chart_template_kp"/>
 			<field name="name">Даночни обврзници</field>
 		</record>
 
 		<record id="account_fiscal_position_template_2" model="account.fiscal.position.template">
-			<field name="chart_template_id" ref="l10n_mk_chart_template"/>
+			<field name="chart_template_id" ref="l10n_mk_chart_template_kp"/>
 			<field name="name">Странски партнери</field>
 		</record>
 
@@ -48,3 +48,4 @@
 		
 	</data>
 </openerp>
+

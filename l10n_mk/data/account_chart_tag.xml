@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Account Chart Template -->
+        <record id="l10n_mk_chart_template_kp" model="account.chart.template">
+            <field name="property_account_receivable_id"    ref="kp_120"/>
+            <field name="property_account_payable_id"       ref="kp_220"/>
+            <field name="property_account_expense_categ_id" ref="kp_449"/>
+            <field name="property_account_income_categ_id"  ref="kp_740"/>
+            <field name="income_currency_exchange_account_id" ref="kp_775"/>
+            <field name="expense_currency_exchange_account_id" ref="kp_475"/>
+        </record>
+
+
+    </data>
+</odoo>
