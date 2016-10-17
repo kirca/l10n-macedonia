@@ -3,9 +3,9 @@
 # this module contains the full copyright notices and license terms.
 {
     'name': 'Macedonian localization',
-    'version': '1.0',
-    'author': 'HacBee UAB',
-    'category': 'Localization/Account Charts',
+    'version': '9.0.1.0.0',
+    'author': 'HBEE',
+    'category': 'Localization',
     'website': 'http://www.hbee.eu',
     'summary': '',
     'description': """
@@ -13,16 +13,16 @@ Macedonian localization of accounts and taxes
 """,
     'depends': [
         'account',
-        'account_chart',
     ],
     'data': [
+        'data/account.account.tag.csv',
         'data/account.account.type.csv',
-        'data/account.tax.code.template.csv',
+        'data/account_chart_template.xml',
         'data/account.account.template.csv',
-        'data/l10n_mk_chart_template.xml',
-        'data/l10n_mk_wizard.xml',
+        'data/account_chart_tag.xml',
         'data/account.tax.template.csv',
         'data/fiscal_position_template.xml',
+        'data/account_chart_template.yml',
     ],
     'installable': True,
     'application': False,
