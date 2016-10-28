@@ -23,6 +23,7 @@ Macedonian localization of accounts and taxes
         'data/account.tax.template.csv',
         'data/fiscal_position_template.xml',
         'data/account_chart_template.yml',
+        'views/report_account_invoice.xml',
     ],
     'installable': True,
     'application': False,
