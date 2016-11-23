@@ -1,0 +1,52 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* l10n_mk
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 9.0c\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-10-28 17:12+0000\n"
+"PO-Revision-Date: 2016-10-28 17:12+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: l10n_mk
+#: model:ir.ui.view,arch_db:l10n_mk.report_invoice_document
+msgid "&amp;nbsp;"
+msgstr "&amp;nbsp;"
+
+#. module: l10n_mk
+#: model:ir.ui.view,arch_db:l10n_mk.report_invoice_document
+msgid "(Name)"
+msgstr "(Име и презиме)"
+
+#. module: l10n_mk
+#: model:ir.ui.view,arch_db:l10n_mk.report_invoice_document
+msgid "(Signature)"
+msgstr "(Потпис)"
+
+#. module: l10n_mk
+#: model:ir.ui.view,arch_db:l10n_mk.report_invoice_document
+msgid "<strong>Authorized person</strong>"
+msgstr "<strong>Овластен потписник на фактура</strong>"
+
+#. module: l10n_mk
+#: model:ir.ui.view,arch_db:l10n_mk.report_invoice_document
+msgid "<strong>Due Date:</strong>"
+msgstr "<strong>Краен датум:</strong>"
+
+#. module: l10n_mk
+#: model:ir.ui.view,arch_db:l10n_mk.report_invoice_document
+msgid "<strong>Received by</strong>"
+msgstr "<strong>Примил</strong>"
+
+#. module: l10n_mk
+#: model:ir.ui.menu,name:l10n_mk.account_reports_mk_statements_menu
+msgid "Macedonian Statements"
+msgstr "Macedonian Statements"
+
