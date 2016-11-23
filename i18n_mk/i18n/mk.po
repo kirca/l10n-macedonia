@@ -48,3 +48,19 @@ msgstr "Општина"
 #: model:ir.ui.menu,name:base.menu_country_state_partner
 msgid "Fed. States"
 msgstr "Општини"
+
+#. module: account
+#: model:ir.ui.view,arch_db:account.report_overdue_document
+msgid "<strong>Sub-Total :</strong>"
+msgstr "<strong>Збир :</strong>"
+
+#. module: account
+#: model:ir.ui.view,arch_db:account.report_invoice_document
+msgid "<strong>Subtotal</strong>"
+msgstr "<strong>Даночна основица</strong>"
+
+#. module: account
+#: model:ir.model.fields,field_description:account.field_account_invoice_tax_base
+#: model:ir.ui.view,arch_db:account.report_invoice_document
+msgid "Base"
+msgstr "Основа"
