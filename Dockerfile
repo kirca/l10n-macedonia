@@ -4,7 +4,6 @@ FROM ubuntu:14.04
 
 # All packages needed for running odoo
 RUN apt-get update && apt-get -y -q install \
-    postgresql-client-9.3 \ 
     build-essential \
     python-dev \
     python-pip \
@@ -32,6 +31,11 @@ RUN apt-get update && apt-get -y -q install \
     npm \
     unzip \
     vim && rm -rf /var/lib/apt/lists/*
+
+RUN echo "deb http://apt.postgresql.org/pub/repos/apt/ trusty-pgdg main 9.5" >> /etc/apt/sources.list.d/postgresql.list && \
+    wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - && \
+    apt-get update && \
+    apt-get -y -q install postgresql-client-9.5 && rm -rf /var/lib/apt/lists/*
 
 RUN gpg --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4
 RUN wget -O /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/1.2/gosu-$(dpkg --print-architecture)" \
