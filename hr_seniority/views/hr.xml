@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+    <record id="view_employee_form" model="ir.ui.view">
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='active_group']//..//.." position="after">
+                <page string="Seniority" groups="base.group_hr_user">
+                    <field name="working_experience" mode="tree">
+                        <tree string="Working Experience" editable="bottom">
+                            <field name="experience"/>
+                            <field name="job_id"/>
+                            <field name="start_date"/>
+                            <field name="end_date"/>
+                            <field name="years"/>
+                            <field name="months"/>
+                            <field name="days"/>
+                        </tree>
+                    </field>
+                    <div name="total_experience" class="oe_right" style="width: 70%;">
+                        <table class="table table-condensed">
+                            <tr>
+                                <td><strong>Prior Work Experience:</strong></td>
+                                <td class="text-right">
+                                    <field name="total_prior_years" class="oe_inline"/> years
+                                </td>
+                                <td class="text-right">
+                                    <field name="total_prior_months" class="oe_inline"/> months
+                                </td>
+                                <td class="text-right">
+                                    <field name="total_prior_days" class="oe_inline"/> days
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Work Experience in this company:</strong></td>
+                                <td class="text-right">
+                                    <field name="total_current_years" class="oe_inline"/> years
+                                </td>
+                                <td class="text-right">
+                                    <field name="total_current_months" class="oe_inline"/> months
+                                </td>
+                                <td class="text-right">
+                                    <field name="total_current_days" class="oe_inline"/> days
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Total:</strong></td>
+                                <td class="text-right">
+                                    <field name="total_years" class="oe_inline"/> years
+                                </td>
+                                <td class="text-right">
+                                    <field name="total_months" class="oe_inline"/> months
+                                </td>
+                                <td class="text-right">
+                                    <field name="total_days" class="oe_inline"/> days
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    </data>
+</odoo>
