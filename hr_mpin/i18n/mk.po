@@ -1,0 +1,150 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* hr_mpin
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 9.0c\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-01-12 16:06+0000\n"
+"PO-Revision-Date: 2017-01-12 16:06+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: hr_mpin
+#: model:ir.model.fields,field_description:hr_mpin.field_res_company_employee_id
+msgid "Authorized signer"
+msgstr "Овластен потписник за плата"
+
+#. module: hr_mpin
+#: model:ir.model,name:hr_mpin.model_res_company
+msgid "Companies"
+msgstr "Компании"
+
+#. module: hr_mpin
+#: model:ir.model,name:hr_mpin.model_hr_contract
+msgid "Contract"
+msgstr "Договор"
+
+#. module: hr_mpin
+#: model:ir.model.fields,field_description:hr_mpin.field_hr_designated_paying_authority_create_uid
+#: model:ir.model.fields,field_description:hr_mpin.field_hr_types_contribution_create_uid
+#: model:ir.model.fields,field_description:hr_mpin.field_hr_types_seniority_insurance_create_uid
+msgid "Created by"
+msgstr "Креирано од"
+
+#. module: hr_mpin
+#: model:ir.model.fields,field_description:hr_mpin.field_hr_designated_paying_authority_create_date
+#: model:ir.model.fields,field_description:hr_mpin.field_hr_types_contribution_create_date
+#: model:ir.model.fields,field_description:hr_mpin.field_hr_types_seniority_insurance_create_date
+msgid "Created on"
+msgstr "Креирано на"
+
+#. module: hr_mpin
+#: model:ir.model.fields,field_description:hr_mpin.field_hr_designated_paying_authority_description
+#: model:ir.model.fields,field_description:hr_mpin.field_hr_types_contribution_description
+#: model:ir.model.fields,field_description:hr_mpin.field_hr_types_seniority_insurance_description
+msgid "Description"
+msgstr "Опис"
+
+#. module: hr_mpin
+#: model:ir.actions.act_window,name:hr_mpin.action_designated_paying_authority_form
+#: model:ir.model,name:hr_mpin.model_designated_paying_authority
+#: model:ir.model,name:hr_mpin.model_hr_designated_paying_authority
+#: model:ir.model.fields,field_description:hr_mpin.field_hr_holidays_status_paying_authority_id
+#: model:ir.ui.menu,name:hr_mpin.menu_action_designated_paying_authority_form
+#: model:ir.ui.view,arch_db:hr_mpin.hr_designated_paying_authority_form
+#: model:ir.ui.view,arch_db:hr_mpin.hr_designated_paying_authority_list
+msgid "Designated paying authority"
+msgstr "Designated paying authority"
+
+#. module: hr_mpin
+#: model:ir.model.fields,field_description:hr_mpin.field_hr_designated_paying_authority_display_name
+#: model:ir.model.fields,field_description:hr_mpin.field_hr_types_contribution_display_name
+#: model:ir.model.fields,field_description:hr_mpin.field_hr_types_seniority_insurance_display_name
+msgid "Display Name"
+msgstr "Прикажи име"
+
+#. module: hr_mpin
+#: model:ir.model.fields,field_description:hr_mpin.field_hr_designated_paying_authority_id
+#: model:ir.model.fields,field_description:hr_mpin.field_hr_types_contribution_id
+#: model:ir.model.fields,field_description:hr_mpin.field_hr_types_seniority_insurance_id
+msgid "ID"
+msgstr "ID"
+
+#. module: hr_mpin
+#: model:ir.model.fields,field_description:hr_mpin.field_hr_designated_paying_authority___last_update
+#: model:ir.model.fields,field_description:hr_mpin.field_hr_types_contribution___last_update
+#: model:ir.model.fields,field_description:hr_mpin.field_hr_types_seniority_insurance___last_update
+msgid "Last Modified on"
+msgstr "Последна промена на"
+
+#. module: hr_mpin
+#: model:ir.model.fields,field_description:hr_mpin.field_hr_designated_paying_authority_write_uid
+#: model:ir.model.fields,field_description:hr_mpin.field_hr_types_contribution_write_uid
+#: model:ir.model.fields,field_description:hr_mpin.field_hr_types_seniority_insurance_write_uid
+msgid "Last Updated by"
+msgstr "Последно ажурирање од"
+
+#. module: hr_mpin
+#: model:ir.model.fields,field_description:hr_mpin.field_hr_designated_paying_authority_write_date
+#: model:ir.model.fields,field_description:hr_mpin.field_hr_types_contribution_write_date
+#: model:ir.model.fields,field_description:hr_mpin.field_hr_types_seniority_insurance_write_date
+msgid "Last Updated on"
+msgstr "Последно ажурирање на"
+
+#. module: hr_mpin
+#: model:ir.model,name:hr_mpin.model_hr_holidays_status
+msgid "Leave Type"
+msgstr "Тип на Отсуство"
+
+#. module: hr_mpin
+#: model:ir.model.fields,field_description:hr_mpin.field_hr_designated_paying_authority_name
+#: model:ir.model.fields,field_description:hr_mpin.field_hr_types_contribution_name
+#: model:ir.model.fields,field_description:hr_mpin.field_hr_types_seniority_insurance_name
+msgid "Name"
+msgstr "Назив"
+
+#. module: hr_mpin
+#: model:ir.ui.view,arch_db:hr_mpin.view_company_form
+msgid "Payroll"
+msgstr "Платен список"
+
+#. module: hr_mpin
+#: model:ir.model.fields,field_description:hr_mpin.field_res_company_regional_unit
+msgid "Regional Unit"
+msgstr "Подрачна единица"
+
+#. module: hr_mpin
+#: model:ir.model.fields,field_description:hr_mpin.field_hr_holidays_status_contribution_id
+msgid "Type of contribution"
+msgstr "Ознака за вид на надоместок"
+
+#. module: hr_mpin
+#: model:ir.model.fields,field_description:hr_mpin.field_hr_contract_insurance_seniority_id
+msgid "Type of seniority for insurance"
+msgstr "Шифра на вид на стаж за осигурување"
+
+#. module: hr_mpin
+#: model:ir.actions.act_window,name:hr_mpin.action_types_contribution_form
+#: model:ir.model,name:hr_mpin.model_hr_types_contribution
+#: model:ir.model,name:hr_mpin.model_types_contribution
+#: model:ir.ui.menu,name:hr_mpin.menu_action_types_contribution_form
+#: model:ir.ui.view,arch_db:hr_mpin.hr_types_contribution_form
+#: model:ir.ui.view,arch_db:hr_mpin.hr_types_contribution_list
+msgid "Types of contribution"
+msgstr "Ознака за вид на надоместок"
+
+#. module: hr_mpin
+#: model:ir.actions.act_window,name:hr_mpin.action_types_seniority_insurance_form
+#: model:ir.model,name:hr_mpin.model_hr_types_seniority_insurance
+#: model:ir.model,name:hr_mpin.model_types_seniority_insurance
+#: model:ir.ui.menu,name:hr_mpin.menu_action_types_seniority_insurance
+#: model:ir.ui.view,arch_db:hr_mpin.hr_types_seniority_insurance_form
+#: model:ir.ui.view,arch_db:hr_mpin.hr_types_seniority_insurance_list
+msgid "Types of seniority for insurance"
+msgstr "Шифра на вид на стаж за осигурување"
