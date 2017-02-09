@@ -60,7 +60,7 @@ msgstr "Опис"
 #: model:ir.ui.view,arch_db:hr_mpin.hr_designated_paying_authority_form
 #: model:ir.ui.view,arch_db:hr_mpin.hr_designated_paying_authority_list
 msgid "Designated paying authority"
-msgstr "Designated paying authority"
+msgstr "Ознака на надлежен орган обврзник за уплата"
 
 #. module: hr_mpin
 #: model:ir.model.fields,field_description:hr_mpin.field_hr_designated_paying_authority_display_name
