@@ -158,9 +158,18 @@ class HrWorkingExperience(models.Model):
                 raise Warning(_(
                     "The field 'Seniority Days' must be in range from 1 to 31"))
 
-            if (not working_exp.end_date and
-                len(working_exp.employee_id.working_experience.filtered(
-                    lambda r: not r.end_date))) > 1:
+            not_entered_date = not(working_exp.years or
+                                   working_exp.months or
+                                   working_exp.days) and not working_exp.start_date
+            active_jobs = len(working_exp.employee_id.working_experience.filtered(
+                            lambda r: not r.end_date and r.start_date))
+
+            if not_entered_date:
+                raise Warning(_(
+                    "You need to enter 'Start Date' or"
+                    " length of your work experience at this position."))
+
+            if not working_exp.end_date and active_jobs > 1:
                 raise Warning(_(
                     "You can have only one ongoing work position."))
 
