@@ -54,7 +54,7 @@ RUN useradd --system -m -r -U odoo && \
     echo "odoo ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
 ENV HOME=/home/odoo \
-    ODOO_COMMIT=a9a7fe15b34f06d97ea92a1a8e9287ea71bbe16c
+    ODOO_COMMIT=22ac4deb9409441fd01d6c290548b0402641d458
 
 WORKDIR $HOME
 RUN wget -O odoo.zip https://github.com/odoo/odoo/archive/$ODOO_COMMIT.zip && \
