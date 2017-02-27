@@ -72,6 +72,18 @@ class HrEmployee(models.Model):
         default=0,
         readonly=True)
 
+    @api.model
+    def convert_to_ymd(self, years, months, days):
+        if days > 30:
+                months += int(days/30)
+                days %= 30
+
+        if months > 12:
+            years += int(months/12)
+            months %= 12
+
+        return years, months, days
+
     @api.multi
     @api.depends('working_experience')
     def _calc_total_prior_dates(self):
@@ -79,9 +91,14 @@ class HrEmployee(models.Model):
             prior_exp = employee.working_experience.filtered(
                     lambda r: r.experience == 'prior_experience')
 
-            employee.total_prior_years = sum(prior_exp.mapped('years'))
-            employee.total_prior_months = sum(prior_exp.mapped('months'))
-            employee.total_prior_days = sum(prior_exp.mapped('days'))
+            years, months, days = self.convert_to_ymd(
+                sum(prior_exp.mapped('years')),
+                sum(prior_exp.mapped('months')),
+                sum(prior_exp.mapped('days')))
+
+            employee.total_prior_years = years
+            employee.total_prior_months = months
+            employee.total_prior_days = days
 
     @api.multi
     @api.depends('working_experience')
@@ -90,20 +107,27 @@ class HrEmployee(models.Model):
             current_exp = employee.working_experience.filtered(
                 lambda r: r.experience == 'in_this_company')
 
-            employee.total_current_years = sum(current_exp.mapped('years'))
-            employee.total_current_months = sum(current_exp.mapped('months'))
-            employee.total_current_days = sum(current_exp.mapped('days'))
+            years, months, days = self.convert_to_ymd(
+                sum(current_exp.mapped('years')),
+                sum(current_exp.mapped('months')),
+                sum(current_exp.mapped('days')))
+
+            employee.total_current_years = years
+            employee.total_current_months = months
+            employee.total_current_days = days
 
     @api.multi
     @api.depends('working_experience')
     def _calc_total_dates(self):
         for employee in self:
-            employee.total_years = sum(
-                employee.working_experience.mapped('years'))
-            employee.total_months = sum(
-                employee.working_experience.mapped('months'))
-            employee.total_days = sum(
-                employee.working_experience.mapped('days'))
+            years, months, days = self.convert_to_ymd(
+                sum(employee.working_experience.mapped('years')),
+                sum(employee.working_experience.mapped('months')),
+                sum(employee.working_experience.mapped('days')))
+
+            employee.total_years = years
+            employee.total_months = months
+            employee.total_days = days
 
 
 class HrWorkingExperience(models.Model):
