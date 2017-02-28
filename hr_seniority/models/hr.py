@@ -8,6 +8,7 @@ from dateutil.relativedelta import relativedelta
 from openerp import fields, models, api, _
 from openerp.exceptions import Warning
 from openerp.tools import DEFAULT_SERVER_DATE_FORMAT
+from utils import convert_to_ymd
 
 
 class HrEmployee(models.Model):
@@ -16,7 +17,7 @@ class HrEmployee(models.Model):
     working_experience = fields.One2many(
         comodel_name='hr.working.experience',
         inverse_name='employee_id',
-        string='working_experience')
+        string='Working Experience')
 
     total_prior_years = fields.Integer(
         string='Total Prior Seniority Years',
@@ -72,18 +73,6 @@ class HrEmployee(models.Model):
         default=0,
         readonly=True)
 
-    @api.model
-    def convert_to_ymd(self, years, months, days):
-        if days > 30:
-                months += int(days/30)
-                days %= 30
-
-        if months > 12:
-            years += int(months/12)
-            months %= 12
-
-        return years, months, days
-
     @api.multi
     @api.depends('working_experience')
     def _calc_total_prior_dates(self):
@@ -91,7 +80,7 @@ class HrEmployee(models.Model):
             prior_exp = employee.working_experience.filtered(
                     lambda r: r.experience == 'prior_experience')
 
-            years, months, days = self.convert_to_ymd(
+            years, months, days = convert_to_ymd(
                 sum(prior_exp.mapped('years')),
                 sum(prior_exp.mapped('months')),
                 sum(prior_exp.mapped('days')))
@@ -107,7 +96,7 @@ class HrEmployee(models.Model):
             current_exp = employee.working_experience.filtered(
                 lambda r: r.experience == 'in_this_company')
 
-            years, months, days = self.convert_to_ymd(
+            years, months, days = convert_to_ymd(
                 sum(current_exp.mapped('years')),
                 sum(current_exp.mapped('months')),
                 sum(current_exp.mapped('days')))
@@ -120,7 +109,7 @@ class HrEmployee(models.Model):
     @api.depends('working_experience')
     def _calc_total_dates(self):
         for employee in self:
-            years, months, days = self.convert_to_ymd(
+            years, months, days = convert_to_ymd(
                 sum(employee.working_experience.mapped('years')),
                 sum(employee.working_experience.mapped('months')),
                 sum(employee.working_experience.mapped('days')))

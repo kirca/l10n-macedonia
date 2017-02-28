@@ -199,12 +199,12 @@ msgstr "Може да имате само една тековна работна
 #. module: hr_seniority
 #: model:ir.ui.view,arch_db:hr_seniority.view_employee_form
 msgid "days"
-msgstr "days"
+msgstr "денови"
 
 #. module: hr_seniority
 #: model:ir.ui.view,arch_db:hr_seniority.view_employee_form
 msgid "months"
-msgstr "months"
+msgstr "месеци"
 
 #. module: hr_seniority
 #: model:ir.model.fields,field_description:hr_seniority.field_hr_employee_working_experience
@@ -214,4 +214,4 @@ msgstr "working_experience"
 #. module: hr_seniority
 #: model:ir.ui.view,arch_db:hr_seniority.view_employee_form
 msgid "years"
-msgstr "years"
+msgstr "години"
