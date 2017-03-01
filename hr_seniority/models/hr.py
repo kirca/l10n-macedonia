@@ -78,7 +78,7 @@ class HrEmployee(models.Model):
     def _calc_total_prior_dates(self):
         for employee in self:
             prior_exp = employee.working_experience.filtered(
-                    lambda r: r.experience == 'prior_experience')
+                lambda r: r.experience == 'prior_experience')
 
             years, months, days = convert_to_ymd(
                 sum(prior_exp.mapped('years')),
@@ -129,8 +129,7 @@ class HrWorkingExperience(models.Model):
 
     experience = fields.Selection([
         ('in_this_company', 'In this company'),
-        ('prior_experience', 'Prior work experience'),
-        ],
+        ('prior_experience', 'Prior work experience')],
         string='Experience',
         index=True,
         default='in_this_company')
@@ -175,7 +174,7 @@ class HrWorkingExperience(models.Model):
                                    working_exp.months or
                                    working_exp.days) and not working_exp.start_date
             active_jobs = len(working_exp.employee_id.working_experience.filtered(
-                            lambda r: not r.end_date and r.start_date))
+                lambda r: not r.end_date and r.start_date))
 
             if not_entered_date:
                 raise Warning(_(

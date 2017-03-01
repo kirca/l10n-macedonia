@@ -5,11 +5,11 @@
 
 def convert_to_ymd(years, months, days):
     if days > 30:
-        months += int(days/30)
+        months += int(days / 30)
         days %= 30
 
     if months > 12:
-        years += int(months/12)
+        years += int(months / 12)
         months %= 12
 
     return years, months, days
