@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hr_types_seniority_insurance_employee,hr.types.seniority.insurance.employee,hr_mpin.model_hr_types_seniority_insurance,base.group_user,1,0,0,0
+access_hr_types_seniority_insurance_manager,hr.types.seniority.insurance.manager,hr_mpin.model_hr_types_seniority_insurance,base.group_hr_manager,1,1,1,1
+access_hr_types_contribution_employee,hr.types.contribution.employee,hr_mpin.model_hr_types_contribution,base.group_user,1,0,0,0
+access_hr_types_contribution_manager,hr.types.contribution.manager,hr_mpin.model_hr_types_contribution,base.group_hr_manager,1,1,1,1
+access_hr_designated_paying_authority_employee,hr.designated.paying.authority.employee,hr_mpin.model_hr_designated_paying_authority,base.group_user,1,0,0,0
+access_hr_designated_paying_authority_manager,hr.designated.paying.authority.manager,hr_mpin.model_hr_designated_paying_authority,base.group_hr_manager,1,1,1,1
+
+
