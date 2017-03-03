@@ -1,0 +1,277 @@
+* Вреднување на залихи
+
+Најкористен начин на пресметка на вредноста на залихата е по просечни набавни цени. 
+Најголем дел од деловните субјекти кои водат залиха, начинот за пресметка на вредноста нa залихите ја вршат на ниво на магацин.
+
+Моментално во Odoo, вреднувањето на просечните набавни цени се врши генерално на ниво на цела компанија (ги зема во предвид сите магацини заедно), а би требало вреднувањето да се врши за секој магацин посебно.
+
+** Odoo
+
+Вреднувањето на залихите се прави врз база на трошковниот метод (field: [[./odoo/addons/stock_account/product.py::234][property_cost_method]]) избран на категоријата на производот.
+
+*Standard Price*: The cost price is manually updated at the end of a specific period (usually once a year).
+
+*Average Price*: The cost price is recomputed at each incoming shipment and used for the product valuation.
+
+*Real Price*: The cost price displayed is the price of the last outgoing product (will be use in case of inventory loss for example).
+
+Според ова калкулирањето на цената на чинење во случајот на *просечни цени* (Average Price) се прави само на *влез* (пренос од добавувач), а пак кога производот се води по *реални цени* (Real Price) тоа се прави само на *излез* (пренос до купувач). 
+
+Цената на чинење на производот за време на калкулациите за вреднување вообичаен се зема со овој метод:
+
+[[./odoo/addons/stock/stock.py::1821][get_price_unit]]
+#+BEGIN_SRC python
+# _name = stock.move
+def get_price_unit(self, cr, uid, move, context=None):
+    """ Returns the unit price to store on the quant """
+    return move.price_unit or move.product_id.standard_price
+#+END_SRC
+
+Квант објектот (stock.quant), кој технички претставува "физичка" количина и преку него се утвурдува вредноста на залихата за некој производ, ја зема цената на чинење користејќи го *get_price_unit* методот на stock.move.
+
+[[./odoo/addons/stock/stock.py::558][_quant_create]]
+#+BEGIN_SRC python
+# _name = stock.quant
+def _quant_create(self, cr, uid, qty, move, lot_id=False, owner_id=False, src_package_id=False, dest_package_id=False,
+                  force_location_from=False, force_location_to=False, context=None):
+    '''Create a quant in the destination location and create a negative quant in the source location if it an internal location.
+    '''
+    if context is None:
+        context = {}
+    price_unit = self.pool.get('stock.move').get_price_unit(cr, uid, move, context=context)
+    location = force_location_to or move.location_dest_id
+    rounding = move.product_id.uom_id.rounding
+    vals = {
+        'product_id': move.product_id.id,
+        'location_id': location.id,
+        'qty': float_round(qty, precision_rounding=rounding),
+        'cost': price_unit,
+        'history_ids': [(4, move.id)],
+        'in_date': datetime.now().strftime(DEFAULT_SERVER_DATETIME_FORMAT),
+        'company_id': move.company_id.id,
+        'lot_id': lot_id,
+        'owner_id': owner_id,
+        'package_id': dest_package_id,
+    }
+    if move.location_id.usage == 'internal':
+        #if we were trying to move something from an internal location and reach here (quant creation),
+        #it means that a negative quant has to be created as well.
+        negative_vals = vals.copy()
+        negative_vals['location_id'] = force_location_from and force_location_from.id or move.location_id.id
+        negative_vals['qty'] = float_round(-qty, precision_rounding=rounding)
+        negative_vals['cost'] = price_unit
+        negative_vals['negative_move_id'] = move.id
+        negative_vals['package_id'] = src_package_id
+        negative_quant_id = self.create(cr, SUPERUSER_ID, negative_vals, context=context)
+        vals.update({'propagated_from_id': negative_quant_id})
+
+    picking_type = move.picking_id and move.picking_id.picking_type_id or False
+    if lot_id and move.product_id.tracking == 'serial' and (not picking_type or (picking_type.use_create_lots or picking_type.use_existing_lots)):
+        if qty != 1.0:
+            raise UserError(_('You should only receive by the piece with the same serial number'))
+
+    #create the quant as superuser, because we want to restrict the creation of quant manually: we should always use this method to create quants
+    quant_id = self.create(cr, SUPERUSER_ID, vals, context=context)
+    return self.browse(cr, uid, quant_id, context=context)
+
+#+END_SRC
+
+*** Калкулирањето на вредноста на преносот/производот на влез (Average Price)
+
+Се зема во предвид вкупната вредност на производот на ниво на цела компанија (сите магацини)
+
+#+BEGIN_SRC 
+вкупна_досегашна_количина = move.product_id.qty_available
+количина_на_пренос = move.product_qty 
+вкупна_досегашна_вредност = вкупна_досегашна_количина * move.product_id.standard_price 
+...
+
+move.product_id.standard_price = (вкупна_досегашна_вредност + вредност_на_пренос) / (вкупна_досегашна_количина + количина_на_пренос)  
+#+END_SRC
+
+[[./odoo/addons/stock_account/stock_account.py::412][product_price_update_before_done]]
+#+BEGIN_SRC python
+# _name = stock.move 
+def product_price_update_before_done(self, cr, uid, ids, context=None):
+    product_obj = self.pool.get('product.product')
+    tmpl_dict = {}
+    for move in self.browse(cr, uid, ids, context=context):
+        #adapt standard price on incomming moves if the product cost_method is 'average'
+        if (move.location_id.usage == 'supplier') and (move.product_id.cost_method == 'average'):
+            product = move.product_id
+            product_id = move.product_id.id
+            qty_available = move.product_id.qty_available
+            if tmpl_dict.get(product_id):
+                product_avail = qty_available + tmpl_dict[product_id]
+            else:
+                tmpl_dict[product_id] = 0
+                product_avail = qty_available
+            # if the incoming move is for a purchase order with foreign currency, need to call this to get the same value that the quant will use.
+            price_unit = self.pool.get('stock.move').get_price_unit(cr, uid, move, context=context)
+            if product_avail <= 0:
+                new_std_price = price_unit
+            else:
+                # Get the standard price
+                amount_unit = product.standard_price
+                new_std_price = ((amount_unit * product_avail) + (price_unit * move.product_qty)) / (product_avail + move.product_qty)
+            tmpl_dict[product_id] += move.product_qty
+            # Write the standard price, as SUPERUSER_ID because a warehouse manager may not have the right to write on products
+            ctx = dict(context or {}, force_company=move.company_id.id)
+            product_obj.write(cr, SUPERUSER_ID, [product.id], {'standard_price': new_std_price}, context=ctx)
+#+END_SRC
+
+*** Калкулирањето на вредноста на преносот/производот на излез (Real Price)
+
+Се зема во предвид само пренесениот производ
+
+#+BEGIN_SRC haskell 
+move.price_unit = ((sum . map (\ q -> q.qty * q.cost)) move.quant_ids) / move.product_qty
+move.product_id.standard_price = move.price_unit
+#+END_SRC
+
+[[./odoo/addons/stock_account/stock_account.py::396][stock_account/stock_account.py]]
+
+#+BEGIN_SRC python
+def _store_average_cost_price(self, cr, uid, move, context=None):
+    ''' move is a browe record '''
+    product_obj = self.pool.get('product.product')
+    if any([q.qty <= 0 for q in move.quant_ids]) or move.product_qty == 0:
+        #if there is a negative quant, the standard price shouldn't be updated
+        return
+    #Note: here we can't store a quant.cost directly as we may have moved out 2 units (1 unit to 5€ and 1 unit to 7€) and in case of a product return of 1 unit, we can't know which of the 2 costs has to be used (5€ or 7€?). So at that time, thanks to the average valuation price we are storing we will valuate it at 6€
+    average_valuation_price = 0.0
+    for q in move.quant_ids:
+        average_valuation_price += q.qty * q.cost
+    average_valuation_price = average_valuation_price / move.product_qty
+    # Write the standard price, as SUPERUSER_ID because a warehouse manager may not have the right to write on products
+    ctx = dict(context or {}, force_company=move.company_id.id)
+    product_obj.write(cr, SUPERUSER_ID, [move.product_id.id], {'standard_price': average_valuation_price}, context=ctx)
+    self.write(cr, uid, [move.id], {'price_unit': average_valuation_price}, context=context)
+#+END_SRC
+
+
+** Решениe
+
+Индивидуални цени по магацин за производи наместо една.
+many2many warehouse_standard_prices врска меѓу stock.warehouse и product.product
+patch на get_price_unit:
+
+#+BEGIN_SRC python
+def get_price_unit(self, cr, uid, move, context=None):
+    return move.price_unit or (move.product_id.get_standard_price_for_location(move.location_dest_id) or move.product_id.standard_price)
+#+END_SRC
+
+write warehouse price...
+
+
+* Книжење на пренос
+
+Моментално во Odoo се книжат само влезните и излезните преноси на ниво на компанија, треба да има книжење и за интерните преноси на ниво на магацин. 
+
+** Odoo
+
+Книжењето се прави со создавање/промена на кванти користејќи го [[./odoo/addons/stock_account/stock_account.py::179][_account_entry_move]] методот
+
+#+BEGIN_SRC python
+def _account_entry_move(self, cr, uid, quants, move, context=None):
+    """
+    Accounting Valuation Entries
+
+    quants: browse record list of Quants to create accounting valuation entries for. Unempty and all quants are supposed to have the same location id (thay already moved in)
+    move: Move to use. browse record
+    """
+    if context is None:
+        context = {}
+    location_obj = self.pool.get('stock.location')
+    location_from = move.location_id
+    location_to = quants[0].location_id
+    company_from = location_obj._location_owner(cr, uid, location_from, context=context)
+    company_to = location_obj._location_owner(cr, uid, location_to, context=context)
+
+    if move.product_id.valuation != 'real_time':
+        return False
+    for q in quants:
+        if q.owner_id:
+            #if the quant isn't owned by the company, we don't make any valuation entry
+            return False
+        if q.qty <= 0:
+            #we don't make any stock valuation for negative quants because the valuation is already made for the counterpart.
+            #At that time the valuation will be made at the product cost price and afterward there will be new accounting entries
+            #to make the adjustments when we know the real cost price.
+            return False
+
+    #in case of routes making the link between several warehouse of the same company, the transit location belongs to this company, so we don't need to create accounting entries
+    # Create Journal Entry for products arriving in the company
+    if company_to and (move.location_id.usage not in ('internal', 'transit') and move.location_dest_id.usage == 'internal' or company_from != company_to):
+        ctx = context.copy()
+        ctx['force_company'] = company_to.id
+        journal_id, acc_src, acc_dest, acc_valuation = self._get_accounting_data_for_valuation(cr, uid, move, context=ctx)
+        if location_from and location_from.usage == 'customer':
+            #goods returned from customer
+            self._create_account_move_line(cr, uid, quants, move, acc_dest, acc_valuation, journal_id, context=ctx)
+        else:
+            self._create_account_move_line(cr, uid, quants, move, acc_src, acc_valuation, journal_id, context=ctx)
+
+    # Create Journal Entry for products leaving the company
+    if company_from and (move.location_id.usage == 'internal' and move.location_dest_id.usage not in ('internal', 'transit') or company_from != company_to):
+        ctx = context.copy()
+        ctx['force_company'] = company_from.id
+        journal_id, acc_src, acc_dest, acc_valuation = self._get_accounting_data_for_valuation(cr, uid, move, context=ctx)
+        if location_to and location_to.usage == 'supplier':
+            #goods returned to supplier
+            self._create_account_move_line(cr, uid, quants, move, acc_valuation, acc_src, journal_id, context=ctx)
+        else:
+            self._create_account_move_line(cr, uid, quants, move, acc_valuation, acc_dest, journal_id, context=ctx)
+
+    if move.company_id.anglo_saxon_accounting and move.location_id.usage == 'supplier' and move.location_dest_id.usage == 'customer':
+        # Creates an account entry from stock_input to stock_output on a dropship move. https://github.com/odoo/odoo/issues/12687
+        ctx = context.copy()
+        ctx['force_company'] = move.company_id.id
+        journal_id, acc_src, acc_dest, acc_valuation = self._get_accounting_data_for_valuation(cr, uid, move, context=ctx)
+        self._create_account_move_line(cr, uid, quants, move, acc_src, acc_dest, journal_id, context=ctx)
+#+END_SRC
+
+Информациите (сметки, дневник) се земаат со методот [[./odoo/addons/stock_account/stock_account.py::272][_get_accounting_data_for_valuation]]
+
+#+BEGIN_SRC python
+def _get_accounting_data_for_valuation(self, cr, uid, move, context=None):
+    """
+    Return the accounts and journal to use to post Journal Entries for the real-time
+    valuation of the quant.
+
+    :param context: context dictionary that can explicitly mention the company to consider via the 'force_company' key
+    :returns: journal_id, source account, destination account, valuation account
+    :raise: openerp.exceptions.UserError if any mandatory account or journal is not defined.
+    """
+    product_obj = self.pool.get('product.template')
+    accounts = product_obj.browse(cr, uid, move.product_id.product_tmpl_id.id, context).get_product_accounts()
+    if move.location_id.valuation_out_account_id:
+        acc_src = move.location_id.valuation_out_account_id.id
+    else:
+        acc_src = accounts['stock_input'].id
+
+    if move.location_dest_id.valuation_in_account_id:
+        acc_dest = move.location_dest_id.valuation_in_account_id.id
+    else:
+        acc_dest = accounts['stock_output'].id
+
+    acc_valuation = accounts.get('stock_valuation', False)
+    if acc_valuation:
+        acc_valuation = acc_valuation.id
+    if not accounts.get('stock_journal', False):
+        raise UserError(_('You don\'t have any stock journal defined on your product category, check if you have installed a chart of accounts'))
+    if not acc_src:
+        raise UserError(_('Cannot find a stock input account for the product %s. You must define one on the product category, or on the location, before processing this operation.') % (move.product_id.name))
+    if not acc_dest:
+        raise UserError(_('Cannot find a stock output account for the product %s. You must define one on the product category, or on the location, before processing this operation.') % (move.product_id.name))
+    if not acc_valuation:
+        raise UserError(_('You don\'t have any stock valuation account defined on your product category. You must define one before processing this operation.'))
+    journal_id = accounts['stock_journal'].id
+    return journal_id, acc_src, acc_dest, acc_valuation
+
+#+END_SRC
+
+** Решение
+
+_account_entry_move да евидентира и меѓумагацински интерни преноси.
+нов метод кој ќе ѓи дава сметките на магацините во случај на ваков пренос.
