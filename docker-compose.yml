@@ -2,7 +2,8 @@ version: '2'
 
 services:
   odoo:
-    image: hbee/l10n-macedonia:9.0.0.3
+    build: .
+    image: lambda-is/l10n-macedonia:11.0
     depends_on:
       - db
     ports:
@@ -10,12 +11,16 @@ services:
     links:
       - db
     volumes:
-      - attachments:/home/odoo/.local
+      - attachments:/var/lib/odoo
   db:
-    image: hbee/odoo-pgsql:9.5.0
+    image: postgres:9.6
+    environment:
+      - POSTGRES_USER=odoo
+      - PGUSER=odoo
+      - POSTGRES_DB=odoo
+      - PGDATA=/var/lib/postgresql/data/pgdata
     volumes:
       - data:/var/lib/postgresql/data
-
 volumes:
   attachments:
     driver: local

@@ -3,4 +3,4 @@ version: '2'
 services:
   odoo:
     volumes:
-      - '.:/home/odoo/addons_l10n-macedonia'
+      - '.:/mnt/extra-addons'

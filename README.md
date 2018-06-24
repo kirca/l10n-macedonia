@@ -9,7 +9,7 @@ Odoo локализациски модули за Р. Македонија
 За развивање и тестирање треба да се користи вклучената Docker
 конфигурација. Потребно е [Docker Engine 1.10.0+](https://docs.docker.com/) и [Docker Compose 1.6.0+](https://docs.docker.com/compose/overview/).
 
-        git clone https://github.com/HBEE/l10n-macedonia.git
+        git clone https://github.com/kirca/l10n-macedonia.git
         cd l10n-macedonia
         docker-compose up
 

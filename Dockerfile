@@ -1,85 +1,85 @@
 # Copyright (C) 2016 by HBEE <https://hbee.eu/>
+# Copyright (C) 2018 by Lambda IS <https://www.lambda-is.com/>
+FROM debian:stretch
+LABEL odoo_version="11.0"
 
-FROM ubuntu:14.04
+# Install some deps, lessc and less-plugin-clean-css, and wkhtmltopdf
+RUN set -x; \
+        apt-get update \
+        && apt-get install -y --no-install-recommends \
+            build-essential \
+            ca-certificates \
+            curl \
+            gnupg \
+            node-less \
+            python3-dev\
+            python3-pip \
+            python3-setuptools \
+            python3-renderpm \
+            python3-lxml \
+            procps \
+            libssl1.0-dev \
+            libffi-dev \
+            libsasl2-dev \
+            libldap2-dev \
+            libxtst6 libfontconfig1 libxrender1 \
+            postgresql-client-9.6 \
+            xz-utils \
+            unzip \
+            wget \
+        && curl -o wkhtmltox.tar.xz -SL https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.4/wkhtmltox-0.12.4_linux-generic-amd64.tar.xz \
+        && echo '3f923f425d345940089e44c1466f6408b9619562 wkhtmltox.tar.xz' | sha1sum -c - \
+        && tar xvf wkhtmltox.tar.xz \
+        && cp wkhtmltox/lib/* /usr/local/lib/ \
+        && cp wkhtmltox/bin/* /usr/local/bin/ \
+        && cp -r wkhtmltox/share/man/man1 /usr/local/share/man/
 
-# All packages needed for running odoo
-RUN apt-get update && apt-get -y -q install \
-    build-essential \
-    python-dev \
-    python-pip \
-    libpq-dev \
-    libfreetype6-dev \
-    libxml2-dev \
-    libxslt1-dev \
-    libjpeg62-dev \
-    liblcms1-dev \
-    libpng12-dev \
-    libsasl2-dev \
-    libssl-dev \
-    libldap2-dev \
-    fontconfig \
-    libfontconfig1 \
-    libjpeg-turbo8 \
-    libxrender1 \
-    xfonts-base \
-    xfonts-75dpi \
-    ca-certificates \
-    git \
-    wget \
-    curl \
-    socat \
-    npm \
-    unzip \
-    vim && rm -rf /var/lib/apt/lists/*
-
-RUN echo "deb http://apt.postgresql.org/pub/repos/apt/ trusty-pgdg main 9.5" >> /etc/apt/sources.list.d/postgresql.list && \
-    wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - && \
-    apt-get update && \
-    apt-get -y -q install postgresql-client-9.5 && rm -rf /var/lib/apt/lists/*
-
-RUN gpg --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4
-RUN wget -O /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/1.2/gosu-$(dpkg --print-architecture)" \
-    && wget -O /usr/local/bin/gosu.asc "https://github.com/tianon/gosu/releases/download/1.2/gosu-$(dpkg --print-architecture).asc" \
-    && gpg --verify /usr/local/bin/gosu.asc \
-    && rm /usr/local/bin/gosu.asc \
-    && chmod +x /usr/local/bin/gosu
-
-RUN ln -s /usr/bin/nodejs /usr/bin/node && \ 
-    npm install -g less less-plugin-clean-css
-
-RUN wget http://download.gna.org/wkhtmltopdf/0.12/0.12.1/wkhtmltox-0.12.1_linux-trusty-amd64.deb && \
-    dpkg -i wkhtmltox-0.12.1_linux-trusty-amd64.deb && rm wkhtmltox-0.12.1_linux-trusty-amd64.deb
-
-RUN useradd --system -m -r -U odoo && \
+# Install Odoo
+ENV HOME=/home/odoo \
+    ODOO_COMMIT=6edf49e36f09c01c61a1dbdb878c5faabf0aef3f \
+    ODOO_GID=111
+RUN groupadd -g $ODOO_GID odoo && \
+    useradd --system --create-home -g $ODOO_GID odoo && \
     echo "odoo ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
-ENV HOME=/home/odoo \
-    ODOO_COMMIT=22ac4deb9409441fd01d6c290548b0402641d458
+COPY ./requirements.txt /tmp/
+RUN chown odoo:odoo /tmp/requirements.txt
 
+USER odoo
 WORKDIR $HOME
 RUN wget -O odoo.zip https://github.com/odoo/odoo/archive/$ODOO_COMMIT.zip && \
     unzip -q odoo.zip && \
     mv odoo-$ODOO_COMMIT odoo && \
-    rm odoo.zip && \
-    chown -R odoo:odoo odoo 
+    rm odoo.zip
 
-RUN pip install --allow-external PyXML --allow-unverified PyXML -r odoo/requirements.txt \ 
-    pyinotify \
-    ipdb
+# Can't get correct dependencies to build lxml from source.
+# Remove and install as system package (python3-lxml).
+RUN grep -v lxml odoo/requirements.txt >> /tmp/requirements.txt && \
+    pip3 install -r /tmp/requirements.txt
+USER root
 
-RUN mkdir -p $HOME/addons_l10n-macedonia
-COPY . $HOME/addons_l10n-macedonia
-RUN cp $HOME/addons_l10n-macedonia/odoo.sh / && \
-    chmod 777 /odoo.sh
+RUN ln -s $HOME/odoo/odoo-bin /usr/bin/odoo
 
-ENV PGHOST=db \
-    PGPORT=5432 \
-    PGDATABASE=odoo \
-    PGUSER=odoo \
-    DB_TEMPLATE=template1 \
-    LOG_LEVEL=critical
+# Install gosu to have a simple way of executing the server as a non-root user in the
+# entrypoint script
+RUN wget -O /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/1.10/gosu-$(dpkg --print-architecture)" \
+    && chmod +x /usr/local/bin/gosu
 
-RUN chown -R odoo:odoo $HOME
+# Copy entrypoint script and Odoo configuration file
+COPY ./entrypoint.sh /
+COPY ./odoo.conf /etc/odoo/
+RUN chown odoo:odoo /etc/odoo/odoo.conf
 
-EXPOSE 8069
-ENTRYPOINT ["/odoo.sh"]
+# Mount /var/lib/odoo to allow restoring filestore and /mnt/extra-addons for users addons
+RUN mkdir -p /mnt/extra-addons /var/lib/odoo && \
+    chown -R odoo:odoo /var/lib/odoo
+VOLUME ["/var/lib/odoo", "/mnt/extra-addons"]
+
+# Expose Odoo services
+EXPOSE 8069 8072
+
+# Set the default config file
+ENV ODOO_RC /etc/odoo/odoo.conf
+
+ENTRYPOINT ["/entrypoint.sh"]
+CMD ["odoo"]
