@@ -1,0 +1,3 @@
+[submodule "submodules/currency"]
+	path = submodules/currency
+	url = https://github.com/OCA/currency.git

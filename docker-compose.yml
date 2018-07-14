@@ -3,7 +3,7 @@ version: '2'
 services:
   odoo:
     build: .
-    image: lambda-is/l10n-macedonia:11.0
+    image: lambda-is/l10n-macedonia:11.1
     depends_on:
       - db
     ports:

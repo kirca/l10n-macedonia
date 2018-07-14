@@ -36,7 +36,7 @@ RUN set -x; \
 
 # Install Odoo
 ENV HOME=/home/odoo \
-    ODOO_COMMIT=6edf49e36f09c01c61a1dbdb878c5faabf0aef3f \
+    ODOO_COMMIT=7d34f0218bf4ee04939e30c6101fb85323fccb71 \
     ODOO_GID=111
 RUN groupadd -g $ODOO_GID odoo && \
     useradd --system --create-home -g $ODOO_GID odoo && \
