@@ -57,8 +57,21 @@ class MK_NBRMGetter(CurrencyGetterInterface):
         return res
 
     def get_updated_currency(self, currency_array, main_currency,
-                             max_delta_days):
-        """implementation of abstract method of Curreny_getter_interface"""
+                             max_delta_days, date=False):
+        """implementation of abstract method of Curreny_getter_interface
+
+        Args:
+        currency_array: List of currencies rates to fetch, e.g. ['EUR', 'USD'].
+        main_currency: The converted currency, e.g. 'MKD'.
+        max_delta_days: Max. days difference between the actual rate date
+                        and today. Raises an exception if not satisfied.
+        date: Rate date. Additional arg that enables to retrieve rate for an
+              older date. This can be used in other modules when the wanted
+              rate is not available in the db. This can happen for example
+              when an invoice in a foreign currency is created with a backdate.
+              The kwarg is specific for this service and not present in the
+              parent class method signature.
+        """
 
         url = 'http://www.nbrm.mk/klservice/kurs.asmx?wsdl'
 
@@ -69,7 +82,7 @@ class MK_NBRMGetter(CurrencyGetterInterface):
         client = SoapClient(wsdl=url, trace=False)
 
         # Get currencies for current day:
-        rate_data_str = datetime.now().strftime('%d.%m.%Y')
+        rate_data_str = date or datetime.now().strftime('%d.%m.%Y')
 
         # There are no namespaces.
         ns = {}
