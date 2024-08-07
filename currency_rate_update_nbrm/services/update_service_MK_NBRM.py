@@ -26,11 +26,11 @@
 from odoo.addons.currency_rate_update.services.currency_getter_interface import CurrencyGetterInterface
 
 from datetime import datetime
-from pysimplesoap.client import SoapClient
 from lxml import etree
 from odoo import exceptions, _
 
 import logging
+import requests
 _logger = logging.getLogger(__name__)
 
 
@@ -44,17 +44,6 @@ class MK_NBRMGetter(CurrencyGetterInterface):
         "BGN", "CZK", "HUF", "PLN", "RON", "HRK", "TRY", "RUB", "BRL", "CNY",
         "HKD", "IDR", "ILS", "INR", "KRW", "MXN", "MYR", "NZD", "PHP", "SGD",
         "THB", "ZAR"]
-
-    def rate_retrieve(self, dom, ns, curr):
-        """ Parse a dom node to retrieve-
-        currencies data"""
-        res = {}
-        xpath_rate_currency = ("KursZbir[Oznaka='%s']/Sreden/text()"
-                               % (curr.upper()))
-
-        res['rate_currency'] = 1 / float(dom.xpath(xpath_rate_currency,
-                                                   namespaces=ns)[0])
-        return res
 
     def get_updated_currency(self, currency_array, main_currency,
                              max_delta_days, date=False):
@@ -73,62 +62,57 @@ class MK_NBRMGetter(CurrencyGetterInterface):
               parent class method signature.
         """
 
-        url = 'http://www.nbrm.mk/klservice/kurs.asmx?wsdl'
+        url = "https://www.nbrm.mk/KLServiceNOV/GetExchangeRate?StartDate={StartDate}&EndDate={EndDate}&format=json"
 
         # we do not want to update the main currency
         if main_currency in currency_array:
             currency_array.remove(main_currency)
 
-        client = SoapClient(wsdl=url, trace=False)
-
         # Get currencies for current day:
         rate_data_str = date or datetime.now().strftime('%d.%m.%Y')
 
-        # There are no namespaces.
-        ns = {}
-        _logger.debug("NBRM currency rate service : connecting...")
-        result = client.GetExchangeRate(
-            StartDate=rate_data_str,
-            EndDate=rate_data_str)
+        _logger.info("NBRM currency rate service : connecting...")
+        resp = requests.get(url.format(
+            StartDate=rate_data_str, EndDate=rate_data_str))
 
-        try:
-            dom = etree.fromstring(result['GetExchangeRateResult'])
-        except:
+        if resp.status_code != 200:
             raise exceptions.Warning(
                 _('Error occurred during getting currencies from NBRM'))
-            _logger.debug("The Service NBRM returned error: %s" % result)
+            _logger.info("The Service NBRM returned error: %s" % resp.text)
 
-        _logger.debug("Received currency list from NBRM!")
+        result = resp.json()
+        _logger.info("Received currency list from NBRM!")
 
-        rate_date = dom.xpath("KursZbir/Datum/text()", namespaces=ns)[0]
+        rate_date = result[0]["datum_f"]
         rate_date_datetime = datetime.strptime(rate_date.split('T')[0],
                                                "%Y-%m-%d")
         self.check_rate_date(rate_date_datetime, max_delta_days)
 
         # we dynamically update supported currencies
-        self.supported_currency_array = dom.xpath(
-            "KursZbir/Oznaka/text()",
-            namespaces=ns)
+        self.supported_currency_array = [x['oznaka'] for x in result]
 
         self.supported_currency_array.append('MKD')
-        _logger.debug("Supported currencies = %s" %
+        _logger.info("Supported currencies = %s" %
                       self.supported_currency_array)
 
         self.validate_cur(main_currency)
+        currency_data = {curr['oznaka']: curr for curr in result}
         if main_currency != 'MKD':
-            main_curr_data = self.rate_retrieve(dom, ns, main_currency)
+            main_curr_data = currency_data[main_currency]
 
         for curr in currency_array:
             self.validate_cur(curr)
             if curr == 'MKD':
-                rate = 1 / main_curr_data['rate_currency']
+                rate = 1 / main_curr_data['sreden']
             else:
-                curr_data = self.rate_retrieve(dom, ns, curr)
+                curr_data = currency_data[curr]
                 if main_currency == 'MKD':
-                    rate = curr_data['rate_currency']
+                    rate = 1 / curr_data['sreden']
                 else:
-                    rate = (curr_data['rate_currency'] /
-                            main_curr_data['rate_currency'])
+                    rate = 1 / (
+                        curr_data['sreden'] /
+                        main_curr_data['sreden']
+                    )
 
             self.updated_currency[curr] = rate
             _logger.debug(
